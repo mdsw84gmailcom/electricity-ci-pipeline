@@ -34,3 +34,4 @@ Weather data: [Open-Meteo](https://open-meteo.com/), CC BY 4.0.
 Electricity prices: [elprisetjustnu.se](https://www.elprisetjustnu.se/).
 
 `make test` runs offline tests only; `make test-live` checks the real APIs.
+
