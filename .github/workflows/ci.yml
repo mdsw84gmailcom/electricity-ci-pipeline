@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
   pull_request:
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -15,4 +16,28 @@ jobs:
       - run: uv run ruff check src tests
       - run: uv run ruff format --check src tests
       - run: uv run mypy
+
+  tests:
+    needs: check
+    runs-on: ubuntu-latest
+    env:
+      HYPOTHESIS_PROFILE: ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
       - run: uv run pytest
+
+  artifact:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create artifact file
+        run: echo "CI pipeline completed successfully" > ci-result.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-result
+          path: ci-result.txt
+      
